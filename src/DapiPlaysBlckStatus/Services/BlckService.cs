@@ -27,7 +27,7 @@ namespace DapiPlaysBlckStatus.Services
             IUserMessage lastMsg = null;
             do
             {
-                await Task.Delay(30_000);
+                await Task.Delay(5*60_000);
                 try
                 {
                     if (channel is null)
