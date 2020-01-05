@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  blckbot:
+    image: blckbot9000
+    build:
+      context: .
+      dockerfile: src/DapiPlaysBlckStatus/Dockerfile
+    env_file:
+      - .env
