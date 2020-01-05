@@ -67,8 +67,6 @@ namespace DapiPlaysBlckStatus.Entities
                 var jsonLength = buffer.ReadVarInt(ref offset);
 
                 var json = buffer.ReadString(jsonLength, ref offset);
-
-                Console.WriteLine(json);
                 
                 return JsonConvert.DeserializeObject<BlckStatus>(json);
             }

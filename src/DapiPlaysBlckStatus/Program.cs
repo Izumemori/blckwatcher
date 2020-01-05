@@ -22,7 +22,7 @@ namespace DapiPlaysBlckStatus
             .ConfigureLogging(loggingBuilder =>
             {
                 loggingBuilder.ClearProviders();
-                loggingBuilder.SetMinimumLevel(LogLevel.Debug);
+                loggingBuilder.SetMinimumLevel(LogLevel.Information);
                 loggingBuilder.AddNLog();
             })
             .ConfigureServices((hostContext, serviceCollection) =>
