@@ -48,7 +48,7 @@ namespace DapiPlaysBlckStatus.Services
                         .WithAuthor(builder => builder.WithName("Blck Status"))
                         .WithColor(Color.Coral)
                         .WithDescription(
-                            status is null ? ":x: Server is offline" : ":white_checkmark: Server is online" );
+                            status is null ? ":x: Server is offline" : ":white_check_mark: Server is online" );
 
                     if (status != null)
                     {
