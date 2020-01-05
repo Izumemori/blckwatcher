@@ -8,16 +8,16 @@ using Newtonsoft.Json;
 
 namespace DapiPlaysBlckStatus.Entities
 {
-    public class MCClient : IAsyncDisposable
+    public class McClient : IAsyncDisposable
     {
         private readonly string _host;
         private readonly short _port;
         private readonly TcpClient _client;
-        private bool isDisposed = false;
-        private Stream stream => this._client?.GetStream();
-        private MemoryStream _buffer;
+        private bool _isDisposed;
+        private Stream? Stream => this._client?.GetStream();
+        private readonly MemoryStream _buffer;
 
-        public MCClient(string host, short port)
+        public McClient(string host, short port)
         {
             this._host = host;
             this._port = port;
@@ -27,9 +27,6 @@ namespace DapiPlaysBlckStatus.Entities
 
         private async Task ConnectAsync()
         {
-            if (this.isDisposed)
-                throw new Exception($"{nameof(MCClient)} cannot be used after being disposed");
-
             if (this._client.Connected)
                 return;
 
@@ -49,20 +46,24 @@ namespace DapiPlaysBlckStatus.Entities
 
         public async Task<BlckStatus?> GetStatusAsync()
         {
+            if (this._isDisposed)
+                throw new Exception($"{nameof(McClient)} cannot be used after being disposed");
+            
             try
             {
                 await ConnectAsync();
                 await SendAsync(0);
 
                 var buffer = new byte[Int16.MaxValue];
-                await this.stream.ReadAsync(buffer, 0, buffer.Length);
+
+                if (this.Stream is null) return null;
+                
+                await this.Stream.ReadAsync(buffer, 0, buffer.Length);
 
                 await SendAsync(1);
 
-                var offset = 0;
+                var offset = 2;
 
-                var length = buffer.ReadVarInt(ref offset);
-                var packet = buffer.ReadVarInt(ref offset);
                 var jsonLength = buffer.ReadVarInt(ref offset);
 
                 var json = buffer.ReadString(jsonLength, ref offset);
@@ -96,14 +97,16 @@ namespace DapiPlaysBlckStatus.Entities
             var bufferLength = _buffer.ToArray();
             this._buffer.Reset();
             
-            this.stream.Write(bufferLength, 0, bufferLength.Length);
-            this.stream.Write(packetData, 0, packetData.Length);
-            this.stream.Write(buffer, 0, buffer.Length);
+            if (this.Stream is null) throw new ArgumentException($"{nameof(this.Stream)} is null");
+            
+            this.Stream.Write(bufferLength, 0, bufferLength.Length);
+            this.Stream.Write(packetData, 0, packetData.Length);
+            this.Stream.Write(buffer, 0, buffer.Length);
         }
 
         public ValueTask DisposeAsync()
         {
-            this.isDisposed = true;
+            this._isDisposed = true;
             if (this._client.Connected)
                 this._client.Close();
 

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -39,7 +38,7 @@ namespace DapiPlaysBlckStatus.Entities.Extensions
         }
 
         public static Task WriteAsync(this MemoryStream stream, byte b)
-            => stream.WriteAsync(new byte[] {b}, 0, 1);
+            => stream.WriteAsync(new [] {b}, 0, 1);
 
         public static void Reset(this MemoryStream stream)
         {

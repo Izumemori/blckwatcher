@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -17,7 +17,6 @@
     <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.0-preview3.19553.2" />
     <PackageReference Include="NLog.Extensions.Logging" Version="1.6.1" />
     <PackageReference Include="Disqord" Version="1.0.0-nightly-*" />
-    <PackageReference Include="Qmmands" Version="3.0.0" />
   </ItemGroup>
   
   <ItemGroup>

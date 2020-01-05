@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Disqord;
@@ -25,6 +24,8 @@ namespace DapiPlaysBlckStatus.Services
 
                 return Task.CompletedTask;
             };
+            
+            this._logger.LogInformation("Logging in...");
             
             _ = this._client.RunAsync();
 

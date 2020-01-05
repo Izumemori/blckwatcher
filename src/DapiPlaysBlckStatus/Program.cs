@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using DapiPlaysBlckStatus.Entities;
 using DapiPlaysBlckStatus.Services;
 using Disqord;
@@ -30,12 +29,7 @@ namespace DapiPlaysBlckStatus
             {
                 serviceCollection.Configure<BotConfig>(hostContext.Configuration.GetSection("BOT"));
                 serviceCollection.Configure<BlckConfig>(hostContext.Configuration.GetSection("BLCK"));
-                serviceCollection.Configure<Qmmands.CommandServiceConfiguration>(conf =>
-                {
-                    conf.DefaultRunMode = Qmmands.RunMode.Parallel;
-                });
-                serviceCollection.AddSingleton<Qmmands.CommandService>(commandServiceBuilder => new Qmmands.CommandService(commandServiceBuilder.GetRequiredService<IOptions<Qmmands.CommandServiceConfiguration>>().Value));
-                serviceCollection.AddSingleton<DiscordClient>(clientBuilder =>
+                serviceCollection.AddSingleton(clientBuilder =>
                     new DiscordClient(TokenType.Bot,
                         clientBuilder.GetRequiredService<IOptions<BotConfig>>().Value.Token));
                 serviceCollection.AddHostedService<EventService>();
