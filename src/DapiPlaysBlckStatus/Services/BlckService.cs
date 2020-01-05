@@ -26,7 +26,7 @@ namespace DapiPlaysBlckStatus.Services
             BlckStatus? status = null;
             do
             {
-                await Task.Delay(15_000);
+                await Task.Delay(15_000, stoppingToken);
                 try
                 {
                     if (channel is null)

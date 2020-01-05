@@ -14,7 +14,7 @@ namespace DapiPlaysBlckStatus.Entities
         private readonly short _port;
         private readonly TcpClient _client;
         private bool _isDisposed;
-        private Stream? Stream => this._client?.GetStream();
+        private Stream Stream => this._client.GetStream();
         private readonly MemoryStream _buffer;
 
         public McClient(string host, short port)
@@ -56,14 +56,14 @@ namespace DapiPlaysBlckStatus.Entities
 
                 var buffer = new byte[Int16.MaxValue];
 
-                if (this.Stream is null) return null;
-                
                 await this.Stream.ReadAsync(buffer, 0, buffer.Length);
 
                 await SendAsync(1);
 
-                var offset = 2;
+                var offset = 0;
 
+                _ = buffer.ReadVarInt(ref offset);
+                _ = buffer.ReadVarInt(ref offset);
                 var jsonLength = buffer.ReadVarInt(ref offset);
 
                 var json = buffer.ReadString(jsonLength, ref offset);
@@ -96,8 +96,6 @@ namespace DapiPlaysBlckStatus.Entities
             await this._buffer.WriteAsync(buffer.Length + add);
             var bufferLength = _buffer.ToArray();
             this._buffer.Reset();
-            
-            if (this.Stream is null) throw new ArgumentException($"{nameof(this.Stream)} is null");
             
             this.Stream.Write(bufferLength, 0, bufferLength.Length);
             this.Stream.Write(packetData, 0, packetData.Length);
