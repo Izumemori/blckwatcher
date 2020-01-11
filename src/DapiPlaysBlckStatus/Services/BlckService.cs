@@ -46,7 +46,7 @@ namespace DapiPlaysBlckStatus.Services
 
                         this._logger.LogDebug($"Got answer: " + (res is null ? "none" : "\n" + res));
                         
-                        if (res?.Equals(status) ?? false) continue;
+                        if ((res is null && status == null) || (res?.Equals(status) ?? false)) continue;
                         
                         this._logger.LogInformation($"State of server `{this._config.Server}:{this._config.Port}` changed, updating...");
 
